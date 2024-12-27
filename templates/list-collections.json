@@ -1,0 +1,65 @@
+{
+  "sections": {
+    "collection-list-header": {
+      "type": "custom-section",
+      "blocks": {
+        "collection-list-heading": {
+          "type": "text",
+          "settings": {
+            "text": "<h1>Collections</h1>",
+            "alignment": "start"
+          }
+        }
+      },
+      "block_order": [
+        "collection-list-heading"
+      ],
+      "settings": {
+        "spacing": {
+          "padding-block-end": "0px"
+        },
+        "layout": {
+          "justify-content": "flex-start"
+        }
+      }
+    },
+    "main-collection": {
+      "type": "main-list-collections",
+      "blocks": {
+        "collection-card": {
+          "type": "collection-card",
+          "static": true,
+          "settings": {
+            "product": "{{ closest.collection }}"
+          },
+          "blocks": {
+            "collection-image": {
+              "type": "image",
+              "settings": {
+                "image": "{{ closest.collection.image }}",
+                "media_featured": true
+              }
+            },
+            "collection-title": {
+              "type": "collection-title",
+              "settings": {
+                "product": "{{ closest.collection }}",
+                "heading_size": "h4"
+              }
+            }
+          },
+          "block_order": [
+            "collection-image",
+            "collection-title"
+          ]
+        }
+      },
+      "settings": {
+      }
+    }
+  },
+  "order": [
+    "collection-list-header",
+    "main-collection"
+  ]
+}

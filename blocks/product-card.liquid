@@ -1,0 +1,91 @@
+<div
+  class="resource-card {{ block.settings | class_list }}"
+  {{ block.shopify_attributes }}
+>
+  <a
+    class="card-link"
+    href="{{ block.settings.product.url }}"
+  >
+  </a>
+  {% content_for 'blocks' %}
+</div>
+
+{% schema %}
+{
+  "name": "Product card",
+  "tag": null,
+  "blocks": [{ "type": "@theme" }, { "type": "@app" }],
+  "settings": [
+    {
+      "type": "product",
+      "id": "product",
+      "label": "Product"
+    },
+    {
+      "type": "style.size_panel",
+      "id": "size",
+      "label": "Size",
+      "default": {
+        "width": "100%",
+        "flex-grow": "1"
+      }
+    },
+    {
+      "type": "style.spacing_panel",
+      "id": "spacing",
+      "label": "Spacing"
+    },
+    {
+      "type": "style.layout_panel",
+      "id": "layout",
+      "label": "Layout",
+      "default": {
+        "flex-wrap": "nowrap",
+        "gap": "5px",
+        "flex-direction": "column",
+        "align-items": "flex-start",
+
+        "@media (--mobile)": {
+          "flex-wrap": "wrap"
+        }
+      }
+    },
+    {
+      "type": "paragraph",
+      "content": "Width is automatically optimized for mobile."
+    }
+  ],
+  "presets": [
+    {
+      "name": "Product card",
+      "settings": {
+        "layout": {
+          "flex-direction": "column"
+        }
+      },
+      "blocks": [
+        {
+          "type": "product-medias",
+          "settings": {
+            "product": "{{ closest.product }}",
+            "media_featured": true
+          }
+        },
+        {
+          "type": "product-title",
+          "settings": {
+            "product": "{{ closest.product }}",
+            "heading_size": "h5"
+          }
+        },
+        {
+          "type": "price",
+          "settings": {
+            "product": "{{ closest.product }}"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

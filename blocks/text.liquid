@@ -1,0 +1,107 @@
+{% stylesheet %}
+  .text-block-subtitle {
+    font-size: 1.8rem;
+    line-height: calc(1 + 0.8 / var(--font-body-scale));
+    letter-spacing: 0.06rem;
+    color: rgba(var(--color-foreground), 0.7);
+  }
+
+  .text-block-caption {
+    font-size: 1rem;
+    letter-spacing: 0.13rem;
+    line-height: calc(1 + 0.2 / var(--font-body-scale));
+    text-transform: uppercase;
+  }
+{% endstylesheet %}
+
+{% comment %} [START block.markup] {% endcomment %}
+<div
+  class="{{ block.settings | class_list }} text-block {{ block.settings.text_style }} text-{{ block.settings.alignment }}"
+  {{ block.shopify_attributes }}
+>
+  {{ block.settings.text }}
+</div>
+{% comment %} [END block.markup] {% endcomment %}
+
+{% comment %} [START block.preset] {% endcomment %}
+{% schema %}
+{
+  "name": "Text",
+  "tag": null,
+  "settings": [
+    {
+      "type": "richtext",
+      "id": "text",
+      "label": "Text",
+      "default": "<p>Share information about your brand with your customers. Describe a product, make announcements, or welcome customers to your store.</p>"
+    },
+    {
+      "type": "select",
+      "id": "text_style",
+      "label": "Style",
+      "options": [
+        {
+          "value": "",
+          "label": "Body"
+        },
+        {
+          "value": "text-block-subtitle",
+          "label": "Subtitle"
+        },
+        {
+          "value": "text-block-caption",
+          "label": "Caption"
+        }
+      ],
+      "default": ""
+    },
+    {
+      "type": "select",
+      "id": "alignment",
+      "label": "Alignment",
+      "options": [
+        {
+          "value": "start",
+          "label": "Left"
+        },
+        {
+          "value": "center",
+          "label": "Center"
+        },
+        {
+          "value": "end",
+          "label": "Right"
+        }
+      ],
+      "default": "start"
+    },
+    {
+      "type": "style.size_panel",
+      "id": "size",
+      "label": "Size",
+      "default": {
+        "width": "auto",
+
+        "@media (--mobile)": {
+          "width": "100%"
+        }
+      }
+    },
+    {
+      "type": "style.spacing_panel",
+      "id": "spacing",
+      "label": "Spacing"
+    }
+  ],
+  "presets": [
+    { "name": "Text" },
+    {
+      "name": "Heading",
+      "settings": {
+        "text": "<h2>Heading<\/h2>"
+      }
+    }
+  ]
+}
+{% endschema %}
+{% comment %} [END block.preset {% endcomment %}

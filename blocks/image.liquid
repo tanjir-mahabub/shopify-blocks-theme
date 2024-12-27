@@ -1,0 +1,75 @@
+{% stylesheet %}
+  .image-block img {
+    height: 100%;
+  }
+
+  .image-block--cover img {
+    object-fit: cover;
+  }
+
+  .image-block--contain img {
+    object-fit: contain;
+  }
+{% endstylesheet %}
+
+<div
+  class="{{ block.settings | class_list }} image-block image-block--{{ block.settings.object_fit }}"
+  {{ block.shopify_attributes }}
+>
+  {%- if block.settings.image -%}
+    {{
+      block.settings.image
+      | image_url: width: 3840
+      | image_tag: width: block.settings.image.width, widths: '375, 550, 750, 1100, 1500, 1780, 2000, 3000, 3840'
+    }}
+  {%- else -%}
+    <div class="placeholder-image">
+      {{ 'detailed-apparel-1' | placeholder_svg_tag: 'image-placeholder-svg' }}
+    </div>
+  {%- endif -%}
+</div>
+
+{% schema %}
+{
+  "name": "Image",
+  "tag": null,
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Image"
+    },
+    {
+      "type": "select",
+      "id": "object_fit",
+      "label": "Image containment",
+      "options": [
+        {
+          "value": "cover",
+          "label": "Cover"
+        },
+        {
+          "value": "contain",
+          "label": "Contain"
+        }
+      ],
+      "default": "cover"
+    },
+    {
+      "type": "style.spacing_panel",
+      "id": "spacing",
+      "label": "Spacing"
+    },
+    {
+      "type": "style.size_panel",
+      "id": "size",
+      "label": "Size",
+      "default": {
+        "width": "100%",
+        "flex-grow": "1"
+      }
+    }
+  ],
+  "presets": [{ "name": "Image" }]
+}
+{% endschema %}

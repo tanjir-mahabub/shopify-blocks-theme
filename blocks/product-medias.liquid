@@ -1,0 +1,142 @@
+{% stylesheet %}
+  .media-block {
+    display: flex;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+  }
+
+  .layout--row > .media-block {
+    align-self: flex-start;
+  }
+
+  .media-block:where(.column) {
+    flex-direction: column;
+  }
+
+  .media-block > div {
+    display: flex;
+  }
+
+  .media-block:not(.column) > div {
+    flex-grow: 1;
+  }
+
+  .media-block:has(div:nth-child(2)) {
+    flex-wrap: wrap;
+  }
+
+  .media-block > div:not(:only-child) {
+    max-width: 50%;
+  }
+
+  .media-block.column > div {
+    max-width: 100%;
+    width: 100%;
+  }
+
+  .media-block .placeholder-image svg {
+    position: relative;
+  }
+{% endstylesheet %}
+
+{% liquid
+  if block.settings.product != blank
+    assign target = block.settings.product
+  endif
+%}
+
+<media-gallery
+  class="{{ block.settings | class_list }} media-block media-block--{{ block.id }} {{ block.settings.direction }}"
+  {{ block.shopify_attributes }}
+  data-section="{{ section.id }}{{ target.id }}"
+>
+  {%- for media in target.media -%}
+    {% liquid
+      assign show_media = true
+      if block.settings.media_featured and media != target.featured_media
+        assign show_media = false
+      endif
+    %}
+
+    {% if show_media %}
+      {% case media.media_type %}
+        {% when 'image' %}
+          <div data-media-id="{{ media.id }}">
+            {{
+              media
+              | image_url: width: 3840
+              | image_tag: widths: '375, 550, 750, 1100, 1500, 1780, 2000, 3000, 3840'
+            }}
+          </div>
+        {% when 'external_video' %}
+          <div data-media-id="{{ media.id }}">
+            {{ media | external_video_tag }}
+          </div>
+        {% when 'video' %}
+          <div data-media-id="{{ media.id }}">
+            {{ media | video_tag: controls: true }}
+          </div>
+        {% when 'model' %}
+          <div data-media-id="{{ media.id }}">
+            {{ media | model_viewer_tag }}
+          </div>
+        {% else %}
+          <div data-media-id="{{ media.id }}">
+            {{ media | media_tag }}
+          </div>
+      {% endcase %}
+    {% endif %}
+  {%- endfor -%}
+
+  {%- if target == blank -%}
+    <div class="placeholder-image">
+      {{ 'product-apparel-2' | placeholder_svg_tag: 'image-placeholder-svg' }}
+    </div>
+  {%- endif -%}
+</media-gallery>
+
+{% schema %}
+{
+  "name": "Product (media)",
+  "tag": null,
+  "settings": [
+    {
+      "type": "product",
+      "id": "product",
+      "label": "Product"
+    },
+    {
+      "type": "checkbox",
+      "id": "media_featured",
+      "label": "Show only the featured media",
+      "default": false
+    },
+    {
+      "type": "style.size_panel",
+      "id": "size",
+      "label": "Size",
+      "default": {
+        "width": "auto",
+
+        "@media (--mobile)": {
+          "width": "100%"
+        }
+      }
+    },
+    {
+      "type": "style.spacing_panel",
+      "id": "spacing",
+      "label": "Spacing"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Product (media)",
+      "settings": {
+        "product": "{{ closest.product }}"
+      }
+    }
+  ]
+}
+{% endschema %}
